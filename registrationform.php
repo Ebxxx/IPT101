@@ -6,7 +6,17 @@
        <!--External bootsrap file-->
     <link rel="Stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- External css file -->
-    <link rel="Stylesheet" href="stylesheet.css">
+    <!--<link rel="Stylesheet" href="stylesheet.css">-->
+     <!-- External css form -->
+    <style>
+    .form-wrapper {
+            background-color:   rgb(57, 144, 225);
+            box-shadow: 0 6px 10px rgb(0, 0, 0, 0.741);
+            padding: 20px;
+            border-radius: 20px;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -33,15 +43,15 @@
                         </div>
                         <div class="form-group">
                             <label for="Last_name">Last name:</label>
-                            <input type="text" class="form-control" name="Last_name">
+                            <input type="text" class="form-control" name="Last_name" pattern="[A-Za-z]+" title="Please enter letters only">
                         </div>
                         <div class="form-group">
                             <label for="First_name">First name:</label>
-                            <input type="text" class="form-control" name="First_name">
+                            <input type="text" class="form-control" name="First_name" pattern="[A-Za-z]+" title="Please enter letters only">
                         </div>
                         <div class="form-group">
                             <label for="Middle_name">Middle name:</label>
-                            <input type="text" class="form-control" name="Middle_name">
+                            <input type="text" class="form-control" name="Middle_name" pattern="[A-Za-z]+" title="Please enter letters only">
                         </div>
                         <div class="form-group">
                             <label for="Email">Email:</label>
@@ -49,7 +59,7 @@
                         </div>  
                         <div class="form-group">
                             <label for="Status">Status:</label>
-                            <input type="text" class="form-control" name="Status">
+                            <input type="text" class="form-control" name="Status" pattern="[A-Za-z]+" title="Please enter letters only">
                         </div><br>
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <br><br>
