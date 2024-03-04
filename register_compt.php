@@ -19,7 +19,7 @@
            		<div class="col-md-6 offset-md-3">
                 	<div class="form-wrapper mt-5">
 						<form action="index.php" method="POST">
-							<h2 style = "color:white">You are now registered.</h2><br><br>
+							<h2 style = "color:white">Please click the "verify" link to verify your email..</h2><br><br>
 							<button  href ="loginform.php" class="btn btn-primary" >Click to login</button><br>
 						</form>
 					</div>
