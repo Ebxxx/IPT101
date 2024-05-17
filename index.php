@@ -31,12 +31,22 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         //If user input are match, log in the user and redirect to the home page
         if (mysqli_num_rows($result) === 1) {
             $row = mysqli_fetch_assoc($result); 
+             if ($row['verified'] == 0) {
+                // User is not verified, redirect with an error message
+                header("Location: loginform.php?error=Please verify your email first. Check your email for the verification link.");
+                exit(); 
+            }
+            $Active = '1';
+            $sql_active = "UPDATE user SET Active = '$Active' WHERE username = '$username'";
+            mysqli_query($conn, $sql_active);
+
+            
             if ($row['username']  === $username && $row['password'] === $password) {
             echo "Logged in!";
             $_SESSION['username'] = $row['username'];
             $_SESSION['name'] = $row['name'];
             $_SESSION['id'] = $row['id'];
-            header("Location: home.php");
+            header("Location: dashboard.php");
             exit();
         }else{
             //Redirect to the loginform with an error message
