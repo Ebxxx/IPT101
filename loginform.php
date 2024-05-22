@@ -45,15 +45,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
+      
           <!-- /.col -->
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -62,7 +54,6 @@
           <!-- /.col -->
         </div>
       </form>
-
             <p class="mb-0">
         <a href="registrationform.php" class="text-center">Register a new membership</a>
       </p>
@@ -73,22 +64,6 @@
 </div>
 <!-- /.login-box -->
 
-   <script>  
-        // Remove the error message from the URL
-            if (window.history.replaceState) {
-                const url = new URL(window.location.href);
-                url.searchParams.delete('error');
-                window.history.replaceState({ path: url.href }, '', url.href);
-            }
-
-            // Clear the error message after refreshing the page
-            window.addEventListener('load', function() {
-                const errorMessage = document.getElementById('errorAlert');
-                if (errorMessage) {
-                    setTimeout(() => errorMessage.style.display = 'none', 5000);
-                }
-            });
-    </script>
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>

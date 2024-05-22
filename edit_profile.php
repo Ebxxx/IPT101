@@ -268,7 +268,7 @@ include "profile_details.php";
                       <div class="form-group row text-center">
                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                          <input type="email" class="form-control" id="Email" name="Email" placeholder=" " required>
+                          <input type="email" class="form-control" id="Email" name="Email" placeholder=" " readonly="true">
                         </div>
                       </div>
                        <div class="form-group row text-center">
@@ -293,7 +293,7 @@ include "profile_details.php";
                        <div class="form-group row text-center">
                         <label for="date_of_birth" class="col-sm-2 col-form-label">date of birth</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="date_of_birth" name="date_of_birth" placeholder=" " required>
+                          <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" placeholder=" " required>
                         </div>
                       </div>
                       <div class="form-group row text-center">

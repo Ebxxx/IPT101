@@ -167,8 +167,6 @@ include "db.php";
                           <img src="<?php echo (!empty($user['profile_picture'])) ? 'uploads/' . $user['profile_picture'] : 'uploads/avatar.png'; ?>" class="profile-user-img img-fluid img-circle" alt="Profile Picture" width="80">
                       </div>
 
-
-
                               <!-- // Check if user is logged in
                               if (!isset($_SESSION['username'])) {
                                   header("Location: loginform.php");
