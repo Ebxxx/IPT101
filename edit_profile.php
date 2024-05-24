@@ -265,18 +265,18 @@ include "profile_details.php";
                           <input type="text" class="form-control" id="Middle_name" name="Middle_name" placeholder=" ">
                         </div>
                       </div>
-                      <div class="form-group row text-center">
+                      <!-- <div class="form-group row text-center">
                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
                           <input type="email" class="form-control" id="Email" name="Email" placeholder=" " readonly="true">
                         </div>
-                      </div>
-                       <div class="form-group row text-center">
+                      </div> -->
+                       <!-- <div class="form-group row text-center">
                         <label for="password" class="col-sm-2 col-form-label">Password</label>
                         <div class="col-sm-10">
                           <input type="password" class="form-control" id="password" name="password" placeholder=" " required>
                         </div>
-                      </div>
+                      </div> -->
                       <div class="form-group row text-center">
                         <label for="phone_number" class="col-sm-2 col-form-label">Phone number</label>
                         <div class="col-sm-10">

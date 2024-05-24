@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          // Concatenate first name, middle name, and last name into full name
         $full_name = trim("$first_name $middle_name $last_name");
 
-        $query = "INSERT INTO user_profile (user_id, full_name, Email) VALUES ('$user_id', '$full_name', '$Email')";
+        $query = "INSERT INTO user_profile (user_id, full_name) VALUES ('$user_id', '$full_name')";
         if (mysqli_query($conn, $query)) {
 
             try {

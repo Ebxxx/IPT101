@@ -8,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $first_name = $_POST['First_name'];
     $last_name = $_POST['Last_name'];
     $middle_name = $_POST['Middle_name'];
-    $email = $_POST['Email'];
-    $password = $_POST['password'];
+    // $email = $_POST['Email'];
+    // $password = $_POST['password'];
     $phone_number = $_POST['phone_number'];
     $address = $_POST['address'];
     $date_of_birth = $_POST['date_of_birth'];
@@ -35,28 +35,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-     // Check if email already exists in the database
-    $email_check_query = "SELECT * FROM user_profile WHERE Email='$email' LIMIT 1";
-    $result = mysqli_query($conn, $email_check_query);
-    $user = mysqli_fetch_assoc($result);
-    if ($user) {
-        $existingEmail = $user['Email'];
-        header("Location: edit_profile.php?error='$existingEmail' already exists. Please try another one.");
-        exit();
-    }
+       // Validate date of birth
+    $current_date = date("Y-m-d");
+    $min_age_date = date("Y-m-d", strtotime("-18 years"));
 
+    if (!empty($date_of_birth)) {
+        $dob_timestamp = strtotime($date_of_birth);
+        $min_age_timestamp = strtotime($min_age_date);
+        $current_timestamp = strtotime($current_date);
+
+        if ($dob_timestamp > $current_timestamp) {
+            // Redirect back to the registration form with an error message
+            header("Location: edit_profile.php?error=Date of birth cannot be in the future");
+            exit;
+        }
+
+        if ($dob_timestamp > $min_age_timestamp) {
+            // Redirect back to the registration form with an error message
+            header("Location: edit_profile.php?error=You must be at least 18 years old");
+            exit;
+        }
+    }
 
     // Concatenate first name, middle name, and last name into full name
     $full_name = trim("$first_name $middle_name $last_name");
 
     // Update user profile information
-    $query = "UPDATE user_profile SET Full_name='$full_name', Email='$email', password='$password', phone_number='$phone_number', address='$address', date_of_birth='$date_of_birth', gender='$gender', social_media='$social_media', profile_picture='$profile_picture'";
+    $query = "UPDATE user_profile SET Full_name='$full_name', phone_number='$phone_number', address='$address', date_of_birth='$date_of_birth', gender='$gender', social_media='$social_media', profile_picture='$profile_picture'";
 
  //    $sql = "INSERT INTO user (username, password, Last_name, First_name, Middle_name, Email, Status, verification_code)
  // VALUES ('$username','$password','$last_name','$first_name','$middle_name','$Email','$Status','$verification_code')";
 
     // Update user table
-    $sql = "UPDATE user SET password='$password', Last_name='$last_name', First_name='$first_name', Middle_name='$middle_name', Email='$email'";
+    $sql = "UPDATE user SET Last_name='$last_name', First_name='$first_name', Middle_name='$middle_name'";
 
     if(mysqli_query($conn, $sql) && mysqli_query($conn, $query)) {
         echo "Profile updated successfully";
