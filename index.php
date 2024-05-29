@@ -36,7 +36,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 header("Location: loginform.php?error=Please verify your email first. Check your email for the verification link.");
                 exit(); 
             }
-            $Active = '1';
+            $Active = 'Online';
             $sql_active = "UPDATE user SET Active = '$Active' WHERE username = '$username'";
             mysqli_query($conn, $sql_active);
 
@@ -45,7 +45,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             echo "Logged in!";
             $_SESSION['username'] = $row['username'];
             $_SESSION['name'] = $row['name'];
-            $_SESSION['id'] = $row['id'];
+            $_SESSION['user_id'] = $row['user_id'];
             header("Location: dashboard.php");
             exit();
         }else{

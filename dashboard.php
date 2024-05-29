@@ -1,7 +1,13 @@
 <?php
-session_start();
 include "db.php";
+include "get_image.php";
+include "profile_details.php";
 
+// Check if the user is not logged in, then redirect to login page
+if (!isset($_SESSION['username'])) {
+    header('Location: loginform.php');
+    exit;
+}
 ?>
 
 
@@ -39,8 +45,8 @@ include "db.php";
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
       <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-          <i class="fas fa-search"></i>
+        <!-- <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+          <i class="fas fa-search"></i> -->
         </a>
         <div class="navbar-search-block">
           <form class="form-inline">
@@ -90,7 +96,7 @@ include "db.php";
       </div>
 
       <!-- SidebarSearch Form -->
-      <div class="form-inline">
+      <!-- <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
           <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
           <div class="input-group-append">
@@ -99,7 +105,7 @@ include "db.php";
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -142,7 +148,7 @@ include "db.php";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Profile</h1>
+            <h1></h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -160,68 +166,28 @@ include "db.php";
         <div class="row">
           <div class="col-md-3">
 
+                       
                 <!-- Profile Image -->
-              <div class="card card-primary card-outline">
-                  <div class="card-body box-profile">
-                      <div class="text-center">
-                          <img src="<?php echo (!empty($user['profile_picture'])) ? 'uploads/' . $user['profile_picture'] : 'uploads/avatar.png'; ?>" class="profile-user-img img-fluid img-circle" alt="Profile Picture" width="80">
-                      </div>
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                <?php 
+                if (!empty($profile_picture)): ?>
+                    <img src="data:image;base64, <?php echo base64_encode($profile_picture); ?>" alt="Profile Picture" class="profile-user-img img-fluid img-circle">
+                <?php else: ?>
+                    <img class="profile-user-img img-fluid img-circle" src="uploads/avatar.png" alt="Blank profile picture">
+                <?php endif; ?>
 
-                              <!-- // Check if user is logged in
-                              if (!isset($_SESSION['username'])) {
-                                  header("Location: loginform.php");
-                                  exit();
-                              }
+                </div>  
 
-                              // Get user information from the database
-                              $username = $_SESSION['username'];
-                              $sql = "SELECT * FROM user WHERE username = '$username'";
-                              $result = mysqli_query($conn, $sql);
-
-                              if (mysqli_num_rows($result) === 1) {
-                                  $row = mysqli_fetch_assoc($result);
-
-                              } else {
-                                  header("Location: loginform.php");
-                                  exit();
-                              }
-
-                              mysqli_close($conn);
-                              ?>
-                              -->
-
-                      <?php
-
-                          // Check if user is logged in
-                          if (!isset($_SESSION['username'])) {
-                              header("Location: loginform.php");
-                              exit();
-                          }
-
-                          $username = $_SESSION['username'];
-                        
-                          // Query to get user information
-                          $sql = "SELECT * FROM user WHERE username = '$username'";
-                          $result = mysqli_query($conn, $sql);
-
-                          // Check if the query was successful
-                          if ($result && mysqli_num_rows($result) > 0) {
-                              $row = mysqli_fetch_assoc($result);
-                              $full_name = $row['First_name'] . ' ' . $row['Middle_name'] . ' ' . $row['Last_name'];
-                              // Display user information
-                          }
-
-                          // Close database connection
-                       mysqli_close($conn);
-                    ?>
-
-                  <!-- <h3 class="profile-username text-center"><?php echo $row['username']; ?></h3> -->
                   <h3 class="profile-username text-center"><?php echo $row['username']; ?></h3>
                   <p class="text-center"><?php echo $full_name ?></p>
-
                   <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
                     <b>Email:</b> <a class="float-right"><?php echo $row['Email']; ?></a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Soc med:</b> <a class="float-right"><?php echo $user['social_media']; ?></a>
                   </li>
                 </ul>
             </div>
@@ -238,7 +204,7 @@ include "db.php";
               }
 
               // Query to fetch the first row
-              $sql = "SELECT phone_number, address, date_of_birth, gender, social_media FROM user_profile LIMIT 1";
+              $sql = "SELECT * FROM user_profile LIMIT 1";
               $result = $conn->query($sql);
 
               if ($result->num_rows > 0) {
@@ -247,7 +213,7 @@ include "db.php";
                 $row = array(); // No rows found, initialize an empty array
               }
 
-              $conn->close();
+              
               ?>
               <!-- About Me Box -->
               <div class="card card-primary">
@@ -272,8 +238,17 @@ include "db.php";
                     <p><?php echo isset($row['gender']) ? $row['gender'] : 'N/A'; ?></p>
                     <hr>
 
-                    <strong><i class="far fa-file-alt mr-1"></i> Social Media: </strong>
-                    <p><?php echo isset($row['social_media']) ? $row['social_media'] : 'N/A'; ?></p>
+                    <strong><i class="fas fa-graduation-cap mr-1"></i> Education: </strong>
+                    <p><?php echo isset($row['education']) ? $row['education'] : 'N/A'; ?></p>
+                    <hr>
+
+                    <strong><i class="far fas fa-briefcase mr-1"></i> Job: </strong>
+                    <p><?php echo isset($row['job']) ? $row['job'] : 'N/A'; ?></p>
+                    <hr>
+
+                    <strong><i class="farfas fa-laptop-code mr-1"></i> Skills: </strong>
+                    <p><?php echo isset($row['skills']) ? $row['skills'] : 'N/A'; ?></p>
+                    <hr>  
                 </div>
                 <!-- /.card-body -->
               </div>
@@ -311,6 +286,8 @@ include "db.php";
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
+
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>

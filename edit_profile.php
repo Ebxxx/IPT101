@@ -1,6 +1,8 @@
 <?php
 session_start();
 include "profile_details.php";
+include "get_image.php";
+include "db.php";
 ?>
 
 <html>
@@ -34,9 +36,9 @@ include "profile_details.php";
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
       <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+        <!-- <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
-        </a>
+        </a> -->
         <div class="navbar-search-block">
           <form class="form-inline">
             <div class="input-group input-group-sm">
@@ -83,7 +85,7 @@ include "profile_details.php";
              </div>
 
       <!-- SidebarSearch Form -->
-      <div class="form-inline">
+      <!-- <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
           <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
           <div class="input-group-append">
@@ -92,7 +94,7 @@ include "profile_details.php";
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -114,15 +116,14 @@ include "profile_details.php";
                 </a>
               </li>
 
-                   <li class="nav-item">
-                    <a href="loginform.php" class="nav-link">
+                   <li class="nav-item">                
+                    <a href="logout.php" class="nav-link">
                      <p>Sign-out</p>
                     </a>
                   </li>
         </ul>
       </nav>
 <!-- /end of nav bar -->
-
 
     </div>
     <!-- /.sidebar -->
@@ -139,7 +140,7 @@ include "profile_details.php";
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">User Profile</li>
+              <li class="breadcrumb-item active">: - )</li>
             </ol>
           </div>
         </div>
@@ -152,45 +153,61 @@ include "profile_details.php";
         <div class="row">
           <div class="col-md-3">
 
-            <!-- Profile Image -->
-            <div class="card card-primary card-outline">
-              <div class="card-body box-profile">
-                <div class="text-center">
-                  <img src="<?php echo (!empty($user['profile_picture'])) ? 'uploads/' . $user['profile_picture'] : 'uploads/avatar.png'; ?>" class="profile-user-img img-fluid img-circle" alt="Profile Picture" width="80">
+          
+         <!-- Profile Image -->
+<div class="card card-primary card-outline">
+    <div class="card-body box-profile">
+        <div class="text-center">
+        <?php 
+        if (!empty($profile_picture)): ?>
+            <img src="data:image;base64, <?php echo base64_encode($profile_picture); ?>" alt="Profile Picture" class="profile-user-img img-fluid img-circle">
+        <?php else: ?>
+            <img class="profile-user-img img-fluid img-circle" src="uploads/avatar.png" alt="Blank profile picture">
+        <?php endif; ?>
 
-                 <!--  <img class="profile-user-img img-fluid img-circle"
-                  src="<?php echo $user['profile_picture']; ?>" class="img-fluid rounded-circle" alt="Profile Picture" width="80" > -->
+        </div>
 
-                </div>
-
-                  <!-- <h3 class="profile-username text-center"><?php echo $row['username']; ?></h3> -->
+        
                   <h3 class="profile-username text-center"><?php echo $row['username']; ?></h3>
                   <p class="text-center"><?php echo $full_name ?></p>
                   <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
                     <b>Email:</b> <a class="float-right"><?php echo $row['Email']; ?></a>
                   </li>
+                  <li class="list-group-item">
+                    <b>Soc med:</b> <a class="float-right"><?php echo $user['social_media']; ?></a>
+                  </li>
                 </ul>
               </div>
             </div>
-            <?php
-                  // Example database connection and query
-                  include 'db.php';
 
-                  
+
+            <?php
+ 
               // Check the connection
               if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
               }
 
               // Query to fetch the first row
-              $sql = "SELECT phone_number, address, date_of_birth, gender, social_media FROM user_profile LIMIT 1";
+              $sql = "SELECT * FROM user_profile LIMIT 1";
               $result = $conn->query($sql);
 
               if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
               } else {
                 $row = array(); // No rows found, initialize an empty array
+              }
+
+               // Query to fetch the first row from user table
+              $sql_user = "SELECT * FROM user LIMIT 1";
+              $result_user = $conn->query($sql_user);
+
+              // Check if the query was successful
+              if ($result_user->num_rows > 0) {
+                  $row_user = $result_user->fetch_assoc();
+              } else {
+                  $row_user = array(); // No rows found, initialize an empty array
               }
 
               $conn->close();
@@ -214,12 +231,24 @@ include "profile_details.php";
                     <p><?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : 'N/A'; ?></p>
                     <hr>
 
-                    <strong><i class="far fa-file-alt mr-1"></i> Gender: </strong>
+                    <strong><i class="fas fa-venus-mars mr-1"></i> Gender: </strong>
                     <p><?php echo isset($row['gender']) ? $row['gender'] : 'N/A'; ?></p>
                     <hr>
 
-                    <strong><i class="far fa-file-alt mr-1"></i> Social Media: </strong>
-                    <p><?php echo isset($row['social_media']) ? $row['social_media'] : 'N/A'; ?></p>
+                    <strong><i class="fas fa-graduation-cap mr-1"></i> Education: </strong>
+                    <p><?php echo isset($row['education']) ? $row['education'] : 'N/A'; ?></p>
+                    <hr>
+
+                    <strong><i class="far fas fa-briefcase mr-1"></i> Job: </strong>
+                    <p><?php echo isset($row['job']) ? $row['job'] : 'N/A'; ?></p>
+                    <hr>
+
+                    <strong><i class="farfas fa-laptop-code mr-1"></i> Skills: </strong>
+                    <p><?php echo isset($row['skills']) ? $row['skills'] : 'N/A'; ?></p>
+                    <hr>
+
+                 
+                    </p>
                 </div>
                 <!-- /.card-body -->
               </div>
@@ -230,76 +259,91 @@ include "profile_details.php";
             </div> 
           </div>
      
-          <div class="col-md-9">
+          <div class="col-md-8">
             <div class="card">
-              <div class="card-header p-2">
-               
-                  <h5 class="nav-item">edit</h5>
+              <div class="card-header p-3">
+              <div class="col-sm-12">
+                  <h5 class="nav-item" style="border: 3px solid #000; padding: 5px; border-color:#5FBDFF; text-align: center; background-color: #5FBDFF ;">Edit profile</h5>
                                  
               </div><!-- /.card-header -->
-            
 
                   <div class="tab-pane" id="settings">
                       <!-- Display error message if user input exists -->
                    <?php if (isset($_GET['error'])) { ?>
                         <div id="errorAlert" class="alert alert-danger"><?php echo $_GET['error']; ?>
                     <?php } ?>
+                     
+                             <!-- Display error message if user input exists -->
+                   <?php if (isset($_GET['success'])) { ?>
+                        <div id="successAlert" class="alert alert-success"><?php echo $_GET['success']; ?>
+                    <?php } ?>
+      
+                    
+                    <br>
+                    <br>
 
-                    <form class="form-horizontal" action="update_profile.php" method="POST">
+                    <form class="form-horizontal" action="update_profile.php" method="POST" enctype="multipart/form-data">
                     <form class="form-horizontal">
                       <div class="form-group row text-center">
                         <label for="Last_name" class="col-sm-2 col-form-label">Last name</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="Last_name" name="Last_name" placeholder=" " required>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="Last_name" name="Last_name" 
+                        placeholder="<?php echo isset($row_user['Last_name']) ? $row_user['Last_name'] : 'N/A'; ?>" required>
                         </div>
                       </div>
                         <div class="form-group row text-center">
                         <label for="First_name" class="col-sm-2 col-form-label">First name</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="First_name" name="First_name" placeholder=" " required>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="First_name" name="First_name" 
+                          placeholder="<?php echo isset($row_user['First_name']) ? $row_user['First_name'] : 'N/A'; ?>" required>
                         </div>
                       </div>
                        <div class="form-group row text-center">
                         <label for="Middle_name" class="col-sm-2 col-form-label">Middle name</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="Middle_name" name="Middle_name" placeholder=" ">
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="Middle_name" name="Middle_name" 
+                          placeholder="<?php echo isset($row_user['Middle_name']) ? $row_user['Middle_name'] : 'N/A'; ?> ">
                         </div>
                       </div>
                       <!-- <div class="form-group row text-center">
                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                           <input type="email" class="form-control" id="Email" name="Email" placeholder=" " readonly="true">
                         </div>
                       </div> -->
                        <!-- <div class="form-group row text-center">
                         <label for="password" class="col-sm-2 col-form-label">Password</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                           <input type="password" class="form-control" id="password" name="password" placeholder=" " required>
                         </div>
                       </div> -->
                       <div class="form-group row text-center">
                         <label for="phone_number" class="col-sm-2 col-form-label">Phone number</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder=" ">
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="phone_number" name="phone_number" 
+                          placeholder="<?php echo isset($row['phone_number']) ? $row['phone_number'] : 'N/A'; ?>">
                         </div>
                       </div>
                       
                       <div class="form-group row text-center">
                         <label for="address" class="col-sm-2 col-form-label">address</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="address" name="address" placeholder=" ">
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="address" name="address" 
+                          placeholder="<?php echo isset($row['address']) ? $row['address'] : 'N/A'; ?>">
                         </div>
                       </div>
                        <div class="form-group row text-center">
-                        <label for="date_of_birth" class="col-sm-2 col-form-label">date of birth</label>
-                        <div class="col-sm-10">
-                          <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" placeholder=" " required>
+                        <label for="date_of_birth" class="col-sm-2 col-form-label">Date of birth</label>
+                        <div class="col-sm-9">
+                          <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
+                          placeholder="<?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : 'N/A'; ?> " required>
                         </div>
                       </div>
                       <div class="form-group row text-center">
                           <label for="gender" class="col-sm-2 col-form-label">Gender</label>
-                          <div class="col-sm-10">
-                              <select type="text" class="form-control" id="gender" name="gender" required>
+                          <div class="col-sm-9">
+                              <select type="text" class="form-control" id="gender" name="gender" 
+                              placeholder="<?php echo isset($row['gender']) ? $row['gender'] : 'N/A'; ?>" required>
                                   <option value="" disabled selected></option>
                                   <option value="male">Male</option>
                                   <option value="female">Female</option>
@@ -309,27 +353,49 @@ include "profile_details.php";
                       </div>
                        <!-- <div class="form-group row text-center">
                         <label for="gender" class="col-sm-2 col-form-label">gender</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                           <input type="text" class="form-control" id="gender" placeholder=" ">
                         </div>
                       </div> -->
 
                        <div class="form-group row text-center">
-                        <label for="social_media" class="col-sm-2 col-form-label">social_media</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="social_media" name="social_media" placeholder=" ">
+                        <label for="social_media" class="col-sm-2 col-form-label">Social media</label>
+                        <div class="col-sm-9">
+                          <input type="link" class="form-control" id="social_media" name="social_media" 
+                          placeholder="<?php echo isset($row['social_media']) ? $row['social_media'] : 'N/A'; ?>">
+                        </div>
+                      </div> 
+                      <div class="form-group row text-center">
+                        <label for="education" class="col-sm-2 col-form-label">Education</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="education" name="education" 
+                          placeholder="<?php echo isset($row['education']) ? $row['education'] : 'N/A'; ?>">
+                        </div>
+                      </div> 
+                      <div class="form-group row text-center">
+                        <label for="job" class="col-sm-2 col-form-label">Job</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="job" name="job" 
+                          placeholder="<?php echo isset($row['job']) ? $row['job'] : 'N/A'; ?>">
+                        </div>
+                      </div> 
+                      <div class="form-group row text-center">
+                        <label for="skills" class="col-sm-2 col-form-label">Skills</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" id="skills" name="skills" 
+                          placeholder="<?php echo isset($row['skills']) ? $row['skills'] : 'N/A'; ?>">
                         </div>
                       </div> 
                       <div class="form-group row text-center">
                         <label for="profile_picture" class="col-sm-2 col-form-label">Profile Picture</label>
-                          <div class="col-sm-10">
-                            <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
+                          <div class="col-sm-9">
+                            <input type="file" class="form-control-file" id="profile_picture" name="profile_picture" accept="image/*">
                           </div>
                       </div>
 
                     <!--   <div class="form-group row text-center">
                         <label for="profile_picture" class="col-sm-2 col-form-label">profile_picture</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                           <input type="text" class="form-control" id="profile_picture" placeholder=" ">
                         </div>
                       </div> -->
@@ -370,6 +436,103 @@ include "profile_details.php";
 </div>
 <!-- ./wrapper -->
 
+
+<!-- ./Script for user input validation -->
+<script>
+    // Check if the browser supports local storage
+    if (typeof(Storage) !== "undefined") {
+        // Retrieve values from local storage and set them as input values
+        document.getElementById("Last_name").value = localStorage.getItem("Last_name");
+        document.getElementById("First_name").value = localStorage.getItem("First_name");
+        document.getElementById("Middle_name").value = localStorage.getItem("Middle_name");
+        document.getElementById("phone_number").value = localStorage.getItem("phone_number");
+        document.getElementById("address").value = localStorage.getItem("address");
+        document.getElementById("date_of_birth").value = localStorage.getItem("date_of_birth");
+        document.getElementById("gender").value = localStorage.getItem("gender");
+        document.getElementById("social_media").value = localStorage.getItem("social_media");
+        document.getElementById("education").value = localStorage.getItem("education");
+        document.getElementById("job").value = localStorage.getItem("job");
+        document.getElementById("skills").value = localStorage.getItem("skills");
+
+        // Store input values in local storage when the form is submitted
+        document.getElementById("submitBtn").addEventListener("click", function() {
+            localStorage.setItem("Last_name", document.getElementById("Last_name").value);
+            localStorage.setItem("First_name", document.getElementById("First_name").value);
+            localStorage.setItem("Middle_name", document.getElementById("Middle_name").value);
+            localStorage.setItem("phone_number", document.getElementById("phone_number").value);
+            localStorage.setItem("address", document.getElementById("address").value);
+            localStorage.setItem("date_of_birth", document.getElementById("date_of_birth").value);
+            localStorage.setItem("gender", document.getElementById("gender").value);
+            localStorage.setItem("social_media", document.getElementById("social_media").value);
+            localStorage.setItem("education", document.getElementById("education").value);
+            localStorage.setItem("job", document.getElementById("job").value);
+            localStorage.setItem("skills", document.getElementById("skills").value);
+            // Mark the form as submitted
+            document.querySelector("form").submitted = true;
+        });
+
+        // Clear local storage when navigating away from the page without submitting the form
+        window.addEventListener('beforeunload', function(event) {
+            if (!document.querySelector("form").submitted) {
+                localStorage.removeItem("Last_name");
+                localStorage.removeItem("First_name");
+                localStorage.removeItem("Middle_name");
+                localStorage.removeItem("phone_number");
+                localStorage.removeItem("address");
+                localStorage.removeItem("date_of_birth");
+                localStorage.removeItem("gender");
+                localStorage.removeItem("social_media");
+                localStorage.removeItem("education");
+                localStorage.removeItem("job");
+                localStorage.removeItem("skills");
+
+                // Hide the error message if it is currently displayed
+                var errorAlert = document.getElementById("errorAlert");
+                if (errorAlert) {
+                    errorAlert.style.display = "none";
+                }
+                var successAlert = document.getElementById("successAlert");
+                if (successAlert) {
+                    successAlert.style.display = "none";
+                }
+            }
+        });
+
+        // Remove the error message from the URL
+        if (window.history.replaceState) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('error');
+            window.history.replaceState({ path: url.href }, '', url.href);
+        }
+
+        // Remove the success message from the URL
+        if (window.history.replaceState) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('success');
+            window.history.replaceState({ path: url.href }, '', url.href);
+        }
+
+        // Clear the error message after refreshing the page
+        window.addEventListener('load', function() {
+            const errorMessage = document.getElementById('error');
+            if (errorMessage) {
+                setTimeout(() => errorMessage.style.display = 'none', 5000);
+            }
+
+            // Clear the success message after refreshing the page
+            const successMessage = document.getElementById('success');
+            if (successMessage) {
+                setTimeout(() => successMessage.style.display = 'none', 5000);
+            }
+        });
+    } else {
+        // Local storage is not supported
+        alert("Sorry, your browser does not support web storage. Your inputs will not be saved.");
+    }
+</script>
+
+
+
 <!-- jQuery -->
 <script type="js/edit.js"></script>
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -380,4 +543,4 @@ include "profile_details.php";
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
 </body>
-</html>x
+</html>

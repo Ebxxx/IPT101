@@ -21,9 +21,9 @@
     <div class="card-header text-center">
       <a href="register.php" class="h1"><b>Admin</b>LTE</a>
        <!-- Display error message if user input exists -->
-                   <?php if (isset($_GET['error'])) { ?>
-                        <div id="errorAlert" class="alert alert-danger"><?php echo $_GET['error']; ?>
-                    <?php } ?>
+       <?php if (isset($_GET['error'])) { ?>
+          <div id="errorAlert" class="alert alert-danger"><?php echo $_GET['error']; ?></div>
+       <?php } ?>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Register a new membership</p>
@@ -31,7 +31,7 @@
       <form action="register.php" method="POST">
 
         <div class="input-group mb-3">
-          <input id="username" type="text" class="form-control" name="username" placeholder="username"pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]+$" title="Username must  contain alpha-numeric characters and underscores" required>
+          <input id="username" type="text" class="form-control" name="username" placeholder="Username" pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]+$" title="Username must contain alphanumeric characters and underscores" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input id="password" type="password" class="form-control" name="password" placeholder="password" required>
+          <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -47,14 +47,15 @@
           </div>
         </div>
         <div class="input-group mb-3">
-           <input id="Last_name" type="text" class="form-control" name="Last_name" placeholder="Last name" pattern="[A-Za-z]+" title="Please enter letters only" required>          <div class="input-group-append">
+          <input id="Last_name" type="text" class="form-control" name="Last_name" placeholder="Last name" pattern="[A-Za-z]+" title="Please enter letters only" required>
+          <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3">
-          <input id="First_name" type="text" class="form-control" name="First_name" placeholder="First name"pattern="[A-Za-z]+" title="Please enter letters only" required>
+          <input id="First_name" type="text" class="form-control" name="First_name" placeholder="First name" pattern="[A-Za-z]+" title="Please enter letters only" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -78,47 +79,48 @@
           </div>
         </div>
         <div class="input-group mb-3">
-        <select  type="text" class="form-control" name="Status" required>
-        <option value="" disabled selected>Status</option>
-        <option value="Single">Single</option>
-        <option value="in Relationships">in Relationships</option>
-        </select>
-        <div class="input-group-append">
+          <select id="Status" class="form-control" name="Status" required>
+            <option value="" disabled selected>Status</option>
+            <option value="Single">Single</option>
+            <option value="in Relationships">In Relationships</option>
+          </select>
+          <div class="input-group-append">
             <div class="input-group-text">
-                    <span class="fas fa-user"></span>
-                </div>
+              <span class="fas fa-user"></span>
             </div>
+          </div>
         </div>
        
+        <div class="row">
           <!-- /.col -->
           <div class="col-4">
             <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Register</button><br>
-            <button type="button" id="clearBtn" class="btn btn-secondary">Clear</button>
           </div>
           <!-- /.col -->
         </div>
-      </form>
-
   
+      </form>
       <a href="loginform.php" class="text-center">I already have a membership</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->
 </div>
- <script src="js/register.js"></script>
-<script>
-  if (typeof(Storage) !== "undefined") {
-    // Retrieve values from local storage and set them as input values
-    document.getElementById("username").value = localStorage.getItem("username");
-    document.getElementById("password").value = localStorage.getItem("password");
-    document.getElementById("Last_name").value = localStorage.getItem("Last_name");
-    document.getElementById("First_name").value = localStorage.getItem("First_name");
-    document.getElementById("Middle_name").value = localStorage.getItem("Middle_name");
-    document.getElementById("Email").value = localStorage.getItem("Email");
-    document.getElementById("Status").value = localStorage.getItem("Status");
-     // Store input values in local storage when the form is submitted
 
-    document.getElementById("submitBtn").addEventListener("click", function() {
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if the browser supports local storage
+    if (typeof(Storage) !== "undefined") {
+      // Retrieve values from local storage and set them as input values
+      document.getElementById("username").value = localStorage.getItem("username") || '';
+      document.getElementById("password").value = localStorage.getItem("password") || '';
+      document.getElementById("Last_name").value = localStorage.getItem("Last_name") || '';
+      document.getElementById("First_name").value = localStorage.getItem("First_name") || '';
+      document.getElementById("Middle_name").value = localStorage.getItem("Middle_name") || '';
+      document.getElementById("Email").value = localStorage.getItem("Email") || '';
+      document.getElementById("Status").value = localStorage.getItem("Status") || '';
+
+      // Store input values in local storage when the form is submitted
+      document.getElementById("submitBtn").addEventListener("click", function() {
         localStorage.setItem("username", document.getElementById("username").value);
         localStorage.setItem("password", document.getElementById("password").value);
         localStorage.setItem("Last_name", document.getElementById("Last_name").value);
@@ -129,18 +131,45 @@
 
         // Mark the form as submitted
         document.querySelector("form").submitted = true;
-    });
+      });
 
-    // Clear input fields when the clear form button is clicked
-    document.getElementById("clearBtn").addEventListener("click", function() {
-        document.getElementById("username").value = "";
-        document.getElementById("password").value = "";
-        document.getElementById("Last_name").value = "";
-        document.getElementById("First_name").value = "";
-        document.getElementById("Middle_name").value = "";
-        document.getElementById("Email").value = "";
-        document.getElementById("Status").value = "";
+      // Clear local storage when navigating away from the page without submitting the form
+      window.addEventListener('beforeunload', function(event) {
+        if (!document.querySelector("form").submitted) {
+          localStorage.removeItem("username");
+          localStorage.removeItem("password");
+          localStorage.removeItem("Last_name");
+          localStorage.removeItem("First_name");
+          localStorage.removeItem("Middle_name");
+          localStorage.removeItem("Email");
+          localStorage.removeItem("Status");
+
+          // Hide the error message if it is currently displayed
+          var errorAlert = document.getElementById("errorAlert");
+          if (errorAlert) {
+            errorAlert.style.display = "none";
+          }
+        }
+      });
+
+      // Remove the error message from the URL
+      if (window.history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('error');
+        window.history.replaceState({ path: url.href }, '', url.href);
+      }
+
+      // Clear the error message after refreshing the page
+      window.addEventListener('load', function() {
+        const errorMessage = document.getElementById('errorAlert');
+        if (errorMessage) {
+          setTimeout(() => errorMessage.style.display = 'none', 5000);
+        }
+      });
+    }
+  });
 </script>
+
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
