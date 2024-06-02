@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include 'db.php';
 
 $message = array();
@@ -61,18 +61,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $full_name = trim("$first_name $middle_name $last_name");
 
+    if(isset($_SESSION['user_id'])) {
+        $userId = $_SESSION['user_id'];
+
     // Update user profile information
     $query = "UPDATE user_profile SET Full_name='$full_name', phone_number='$phone_number', address='$address',
-     date_of_birth='$date_of_birth', gender='$gender', social_media='$social_media', profile_picture='$profile_picture_content', education='$education', job='$job', skills='$skills'";
+     date_of_birth='$date_of_birth', gender='$gender', social_media='$social_media', profile_picture='$profile_picture_content',
+     education='$education', job='$job', skills='$skills' WHERE user_id = $userId";
 
     // Update user table
-    $sql = "UPDATE user SET Last_name='$last_name', First_name='$first_name', Middle_name='$middle_name'";
+    $sql = "UPDATE user SET Last_name='$last_name', First_name='$first_name', Middle_name='$middle_name' 
+    WHERE user_id = $userId";
 
     if (mysqli_query($conn, $sql) && mysqli_query($conn, $query)) {
         header("Location: edit_profile.php?success=Profile updated successfully");
     } else {
         echo "Error updating profile: " . mysqli_error($conn);
     }
+}
 }
 
 mysqli_close($conn);

@@ -203,8 +203,11 @@ if (!isset($_SESSION['username'])) {
                 die("Connection failed: " . $conn->connect_error);
               }
 
+                
+              if(isset($_SESSION['user_id'])) {
+                $userId = $_SESSION['user_id'];
               // Query to fetch the first row
-              $sql = "SELECT * FROM user_profile LIMIT 1";
+              $sql = "SELECT * FROM user_profile WHERE user_id = $userId";
               $result = $conn->query($sql);
 
               if ($result->num_rows > 0) {
@@ -212,6 +215,8 @@ if (!isset($_SESSION['username'])) {
               } else {
                 $row = array(); // No rows found, initialize an empty array
               }
+            }
+
 
               
               ?>

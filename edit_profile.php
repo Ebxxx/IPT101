@@ -189,8 +189,10 @@ include "db.php";
                 die("Connection failed: " . $conn->connect_error);
               }
 
+              if(isset($_SESSION['user_id'])) {
+                $userId = $_SESSION['user_id'];
               // Query to fetch the first row
-              $sql = "SELECT * FROM user_profile LIMIT 1";
+              $sql = "SELECT * FROM user_profile WHERE user_id = $userId";
               $result = $conn->query($sql);
 
               if ($result->num_rows > 0) {
@@ -198,9 +200,12 @@ include "db.php";
               } else {
                 $row = array(); // No rows found, initialize an empty array
               }
+            }
 
+              if(isset($_SESSION['user_id'])) {
+                $userId = $_SESSION['user_id'];
                // Query to fetch the first row from user table
-              $sql_user = "SELECT * FROM user LIMIT 1";
+              $sql_user = "SELECT * FROM user WHERE user_id = $userId";
               $result_user = $conn->query($sql_user);
 
               // Check if the query was successful
@@ -209,6 +214,7 @@ include "db.php";
               } else {
                   $row_user = array(); // No rows found, initialize an empty array
               }
+            }
 
               $conn->close();
               ?>
@@ -305,26 +311,78 @@ include "db.php";
                           placeholder="<?php echo isset($row_user['Middle_name']) ? $row_user['Middle_name'] : 'N/A'; ?> ">
                         </div>
                       </div>
-                      <!-- <div class="form-group row text-center">
-                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-9">
-                          <input type="email" class="form-control" id="Email" name="Email" placeholder=" " readonly="true">
-                        </div>
-                      </div> -->
-                       <!-- <div class="form-group row text-center">
-                        <label for="password" class="col-sm-2 col-form-label">Password</label>
-                        <div class="col-sm-9">
-                          <input type="password" class="form-control" id="password" name="password" placeholder=" " required>
-                        </div>
-                      </div> -->
+                   
                       <div class="form-group row text-center">
                         <label for="phone_number" class="col-sm-2 col-form-label">Phone number</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" id="phone_number" name="phone_number" 
-                          placeholder="<?php echo isset($row['phone_number']) ? $row['phone_number'] : 'N/A'; ?>">
+                        <div class="col-sm-3">
+                          <select class="form-control" id="country_code" name="country_code" required>
+                          <option value="+1">+1 (USA)</option>
+                            <option value="+44">+44 (UK)</option>
+                            <option value="+91">+91 (India)</option>
+                            <option value="+7">+7 (Russia)</option>
+                            <option value="+86">+86 (China)</option>
+                            <option value="+33">+33 (France)</option>
+                            <option value="+49">+49 (Germany)</option>
+                            <option value="+81">+81 (Japan)</option>
+                            <option value="+61">+61 (Australia)</option>
+                            <option value="+55">+55 (Brazil)</option>
+                            <option value="+234">+234 (Nigeria)</option>
+                            <option value="+92">+92 (Pakistan)</option>
+                            <option value="+62">+62 (Indonesia)</option>
+                            <option value="+90">+90 (Turkey)</option>
+                            <option value="+20">+20 (Egypt)</option>
+                            <option value="+82">+82 (South Korea)</option>
+                            <option value="+39">+39 (Italy)</option>
+                            <option value="+84">+84 (Vietnam)</option>
+                            <option value="+27">+27 (South Africa)</option>
+                            <option value="+33">+33 (France)</option>
+                            <option value="+55">+55 (Brazil)</option>
+                            <option value="+86">+86 (China)</option>
+                            <option value="+91">+91 (India)</option>
+                            <option value="+62">+62 (Indonesia)</option>
+                            <option value="+81">+81 (Japan)</option>
+                            <option value="+82">+82 (South Korea)</option>
+                            <option value="+60">+60 (Malaysia)</option>
+                            <option value="+52">+52 (Mexico)</option>
+                            <option value="+31">+31 (Netherlands)</option>
+                            <option value="+63">+63 (Philippines)</option>
+                            <option value="+7">+7 (Russia)</option>
+                            <option value="+27">+27 (South Africa)</option>
+                            <option value="+34">+34 (Spain)</option>
+                            <option value="+46">+46 (Sweden)</option>
+                            <option value="+41">+41 (Switzerland)</option>
+                            <option value="+66">+66 (Thailand)</option>
+                            <option value="+90">+90 (Turkey)</option>
+                            <option value="+380">+380 (Ukraine)</option>
+                            <option value="+84">+84 (Vietnam)</option>
+                            <option value="+20">+20 (Egypt)</option>
+                            <option value="+49">+49 (Germany)</option>
+                            <option value="+33">+33 (France)</option>
+                            <option value="+91">+91 (India)</option>
+                            <option value="+62">+62 (Indonesia)</option>
+                            <option value="+81">+81 (Japan)</option>
+                            <option value="+82">+82 (South Korea)</option>
+                            <option value="+60">+60 (Malaysia)</option>
+                            <option value="+52">+52 (Mexico)</option>
+                            <option value="+31">+31 (Netherlands)</option>
+                            <option value="+63">+63 (Philippines)</option>
+                            <option value="+7">+7 (Russia)</option>
+                            <option value="+27">+27 (South Africa)</option>
+                            <option value="+34">+34 (Spain)</option>
+                            <option value="+46">+46 (Sweden)</option>
+                            <option value="+41">+41 (Switzerland)</option>
+                            <option value="+66">+66 (Thailand)</option>
+                            <option value="+90">+90 (Turkey)</option>
+                            <option value="+380">+380 (Ukraine)</option>
+                            <option value="+84">+84 (Vietnam)</option>
+                            <!-- Add more country codes as needed -->
+                          </select>
+                        </div>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="" required>
                         </div>
                       </div>
-                      
+
                       <div class="form-group row text-center">
                         <label for="address" class="col-sm-2 col-form-label">address</label>
                         <div class="col-sm-9">
@@ -351,12 +409,6 @@ include "db.php";
                               </select>
                           </div>
                       </div>
-                       <!-- <div class="form-group row text-center">
-                        <label for="gender" class="col-sm-2 col-form-label">gender</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" id="gender" placeholder=" ">
-                        </div>
-                      </div> -->
 
                        <div class="form-group row text-center">
                         <label for="social_media" class="col-sm-2 col-form-label">Social media</label>
@@ -393,12 +445,7 @@ include "db.php";
                           </div>
                       </div>
 
-                    <!--   <div class="form-group row text-center">
-                        <label for="profile_picture" class="col-sm-2 col-form-label">profile_picture</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" id="profile_picture" placeholder=" ">
-                        </div>
-                      </div> -->
+
                       <div class="col-4">
             <button type="submit" class="btn btn-primary btn-box" name="edit_profile" value="Update Profile" id="submitBtn" >submit</button>
           </div>
@@ -446,6 +493,7 @@ include "db.php";
         document.getElementById("First_name").value = localStorage.getItem("First_name");
         document.getElementById("Middle_name").value = localStorage.getItem("Middle_name");
         document.getElementById("phone_number").value = localStorage.getItem("phone_number");
+        document.getElementById("country_code").value = localStorage.getItem("country_code");
         document.getElementById("address").value = localStorage.getItem("address");
         document.getElementById("date_of_birth").value = localStorage.getItem("date_of_birth");
         document.getElementById("gender").value = localStorage.getItem("gender");
@@ -460,6 +508,7 @@ include "db.php";
             localStorage.setItem("First_name", document.getElementById("First_name").value);
             localStorage.setItem("Middle_name", document.getElementById("Middle_name").value);
             localStorage.setItem("phone_number", document.getElementById("phone_number").value);
+            localStorage.setItem("country_code", document.getElementById("country_code").value);
             localStorage.setItem("address", document.getElementById("address").value);
             localStorage.setItem("date_of_birth", document.getElementById("date_of_birth").value);
             localStorage.setItem("gender", document.getElementById("gender").value);
@@ -478,6 +527,7 @@ include "db.php";
                 localStorage.removeItem("First_name");
                 localStorage.removeItem("Middle_name");
                 localStorage.removeItem("phone_number");
+                localStorage.removeItem("country_code");
                 localStorage.removeItem("address");
                 localStorage.removeItem("date_of_birth");
                 localStorage.removeItem("gender");
@@ -528,6 +578,31 @@ include "db.php";
     } else {
         // Local storage is not supported
         alert("Sorry, your browser does not support web storage. Your inputs will not be saved.");
+    }
+
+        document.getElementById('country_code').addEventListener('change', function() {
+        var countryCode = this.value;
+        var phoneNumberInput = document.getElementById('phone_number');
+        phoneNumberInput.value = countryCode;
+        phoneNumberInput.setAttribute('placeholder', countryCode);
+    });
+
+    document.getElementById('phone_number').addEventListener('input', function() {
+        var countryCode = document.getElementById('country_code').value;
+        var phoneNumber = this.value;
+        var fullNumber = phoneNumber.startsWith(countryCode) ? phoneNumber : countryCode + phoneNumber;
+
+        if (!validatePhoneNumber(fullNumber)) {
+            this.setCustomValidity('Phone number does not match the selected country code.');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    function validatePhoneNumber(phoneNumber) {
+        // A basic example of phone number validation
+        var regex = /^\+\d{1,3}\d{6,14}$/; // Adjust this regex based on your requirements
+        return regex.test(phoneNumber);
     }
 </script>
 
