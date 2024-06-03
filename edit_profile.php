@@ -101,7 +101,7 @@ include "db.php";
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item"></li>
    
-          <li class="nav-item menu-open">
+      <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-book"></i>
               <p>
@@ -112,58 +112,67 @@ include "db.php";
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="edit_profile.php" class="nav-link">
+                  <i class="fa fa-user"></i>&nbsp;&nbsp;
                   <p>Edit Profile</p>
                 </a>
               </li>
 
+               <li class="nav-item">                
+                    <a href="security_dash.php" class="nav-link">
+                      <i class="fa fa-unlock-alt" ></i>&nbsp;&nbsp;
+                     <p>Security Settings</p> 
+                    </a>
+                  </li>
+
                    <li class="nav-item">                
                     <a href="logout.php" class="nav-link">
+                      <i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;
                      <p>Sign-out</p>
                     </a>
                   </li>
-        </ul>
-      </nav>
-<!-- /end of nav bar -->
+                    </ul>
+                  </nav>
+            <!-- /end of nav bar -->
 
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+                </div>
+                <!-- /.sidebar -->
+              </aside>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Profile</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">: - )</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
+              <!-- Content Wrapper. Contains page content -->
+              <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                  <div class="container-fluid">
+                    <div class="row mb-2">
+                      <div class="col-sm-6">
+                        <h1>Profile</h1>
+                      </div>
+                      <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                          <li class="breadcrumb-item active">: - )</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div><!-- /.container-fluid -->
+                </section>
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-3">
+                <!-- Main content -->
+                <section class="content">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-md-3">
 
-          
-         <!-- Profile Image -->
-<div class="card card-primary card-outline">
-    <div class="card-body box-profile">
-        <div class="text-center">
-        <?php 
-        if (!empty($profile_picture)): ?>
-            <img src="data:image;base64, <?php echo base64_encode($profile_picture); ?>" alt="Profile Picture" class="profile-user-img img-fluid img-circle">
-        <?php else: ?>
-            <img class="profile-user-img img-fluid img-circle" src="uploads/avatar.png" alt="Blank profile picture">
-        <?php endif; ?>
+                      
+                     <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                    <div class="text-center">
+                    <?php 
+                    if (!empty($profile_picture)): ?>
+                        <img src="data:image;base64, <?php echo base64_encode($profile_picture); ?>" alt="Profile Picture" class="profile-user-img img-fluid img-circle">
+                    <?php else: ?>
+                        <img class="profile-user-img img-fluid img-circle" src="uploads/avatar.png" alt="Blank profile picture">
+                    <?php endif; ?>
 
         </div>
 
@@ -249,7 +258,7 @@ include "db.php";
                     <p><?php echo isset($row['job']) ? $row['job'] : 'N/A'; ?></p>
                     <hr>
 
-                    <strong><i class="farfas fa-laptop-code mr-1"></i> Skills: </strong>
+                    <strong><i class="<fa-solid fa-code mr-1"></i> Skills: </strong>
                     <p><?php echo isset($row['skills']) ? $row['skills'] : 'N/A'; ?></p>
                     <hr>
 
@@ -311,12 +320,18 @@ include "db.php";
                           placeholder="<?php echo isset($row_user['Middle_name']) ? $row_user['Middle_name'] : 'N/A'; ?> ">
                         </div>
                       </div>
-                   
+ 
                       <div class="form-group row text-center">
                         <label for="phone_number" class="col-sm-2 col-form-label">Phone number</label>
                         <div class="col-sm-3">
                           <select class="form-control" id="country_code" name="country_code" required>
-                          <option value="+1">+1 (USA)</option>
+                            
+
+                          <!-- <option value="" disabled selected>Select your option</option>
+                          <option value="hurr">Durr</option> -->
+    
+                          <option value="" disabled selected >Select Country Code</option>
+                            <option value="+1">+1 (USA)</option>
                             <option value="+44">+44 (UK)</option>
                             <option value="+91">+91 (India)</option>
                             <option value="+7">+7 (Russia)</option>
@@ -379,7 +394,7 @@ include "db.php";
                           </select>
                         </div>
                         <div class="col-sm-6">
-                          <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="" required>
+                          <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone number " required>
                         </div>
                       </div>
 

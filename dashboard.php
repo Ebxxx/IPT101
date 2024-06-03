@@ -112,7 +112,7 @@ if (!isset($_SESSION['username'])) {
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item"></li>
    
-          <li class="nav-item menu-open">
+         <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-book"></i>
               <p>
@@ -123,16 +123,28 @@ if (!isset($_SESSION['username'])) {
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="edit_profile.php" class="nav-link">
+                  <i class="fa fa-user"></i>&nbsp;&nbsp;
                   <p>Edit Profile</p>
                 </a>
               </li>
 
-                   <li class="nav-item">
-                    <a href="loginform.php" class="nav-link">
+               <li class="nav-item">                
+                    <a href="security_dash.php" class="nav-link">
+                      <i class="fa fa-unlock-alt" ></i>&nbsp;&nbsp;
+                     <p>Security Settings</p> 
+                    </a>
+                  </li>
+
+
+
+
+                   <li class="nav-item">                
+                    <a href="logout.php" class="nav-link">
+                      <i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;
                      <p>Sign-out</p>
                     </a>
                   </li>
-        </ul>
+                  
       </nav>
 <!-- /end of nav bar -->
 
