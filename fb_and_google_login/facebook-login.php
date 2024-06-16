@@ -54,7 +54,8 @@ if (isset($_GET['code']) && !empty($_GET['code'])) {
             $_SESSION['username'] = $user_row['username'];
 
             // Update the 'Active' column to 'Online' and set verified to 1 for the logged-in user
-            $update_active_query = "UPDATE user SET Active = 'Online', verified = 1 WHERE user_id = " . $user_row['user_id'];
+            $active = 'Online';
+            $update_active_query = "UPDATE user SET Active = '$active', verified = 1 WHERE user_id = " . $user_row['user_id'];
             mysqli_query($conn, $update_active_query);
 
             // Redirect to the dashboard after login

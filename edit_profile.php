@@ -101,21 +101,32 @@ include "db.php";
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item"></li>
    
-      <li class="nav-item menu-open">
+          <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-book"></i>
               <p>
-                Menu
+                Dashboard
                 <i class="fas fa-angle-left right"></i>
               </p>
-            </a>
+            </a>        
             <ul class="nav nav-treeview">
+            <li class="nav-item">                
+                    <a href="index_admin/enroll_students.php" class="nav-link">
+                      <i class="fas fa-graduation-cap mr-1" ></i>&nbsp;&nbsp;
+                     <p>Students</p> 
+                    </a>
+                  </li>
+
+                  <br>
+
               <li class="nav-item">
                 <a href="edit_profile.php" class="nav-link">
                   <i class="fa fa-user"></i>&nbsp;&nbsp;
                   <p>Edit Profile</p>
                 </a>
               </li>
+              
+
 
                <li class="nav-item">                
                     <a href="security_dash.php" class="nav-link">
@@ -123,15 +134,14 @@ include "db.php";
                      <p>Security Settings</p> 
                     </a>
                   </li>
-
+                  <br>
+            
                    <li class="nav-item">                
                     <a href="logout.php" class="nav-link">
                       <i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;
                      <p>Sign-out</p>
                     </a>
                   </li>
-                    </ul>
-                  </nav>
             <!-- /end of nav bar -->
 
                 </div>
@@ -303,14 +313,14 @@ include "db.php";
                         <label for="Last_name" class="col-sm-2 col-form-label">Last name</label>
                         <div class="col-sm-9">
                         <input type="text" class="form-control" id="Last_name" name="Last_name" 
-                        placeholder="<?php echo isset($row_user['Last_name']) ? $row_user['Last_name'] : 'N/A'; ?>" required>
+                        placeholder="<?php echo isset($row_user['Last_name']) ? $row_user['Last_name'] : 'N/A'; ?>" >
                         </div>
                       </div>
                         <div class="form-group row text-center">
                         <label for="First_name" class="col-sm-2 col-form-label">First name</label>
                         <div class="col-sm-9">
                           <input type="text" class="form-control" id="First_name" name="First_name" 
-                          placeholder="<?php echo isset($row_user['First_name']) ? $row_user['First_name'] : 'N/A'; ?>" required>
+                          placeholder="<?php echo isset($row_user['First_name']) ? $row_user['First_name'] : 'N/A'; ?>" >
                         </div>
                       </div>
                        <div class="form-group row text-center">
@@ -324,7 +334,7 @@ include "db.php";
                       <div class="form-group row text-center">
                         <label for="phone_number" class="col-sm-2 col-form-label">Phone number</label>
                         <div class="col-sm-3">
-                          <select class="form-control" id="country_code" name="country_code" required>
+                          <select class="form-control" id="country_code" name="country_code" >
                             
 
                           <!-- <option value="" disabled selected>Select your option</option>
@@ -394,7 +404,7 @@ include "db.php";
                           </select>
                         </div>
                         <div class="col-sm-6">
-                          <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone number " required>
+                          <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone number " >
                         </div>
                       </div>
 
@@ -409,14 +419,14 @@ include "db.php";
                         <label for="date_of_birth" class="col-sm-2 col-form-label">Date of birth</label>
                         <div class="col-sm-9">
                           <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
-                          placeholder="<?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : 'N/A'; ?> " required>
+                          placeholder="<?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : 'N/A'; ?> " >
                         </div>
                       </div>
                       <div class="form-group row text-center">
                           <label for="gender" class="col-sm-2 col-form-label">Gender</label>
                           <div class="col-sm-9">
                               <select type="text" class="form-control" id="gender" name="gender" 
-                              placeholder="<?php echo isset($row['gender']) ? $row['gender'] : 'N/A'; ?>" required>
+                              placeholder="<?php echo isset($row['gender']) ? $row['gender'] : 'N/A'; ?>" >
                                   <option value="" disabled selected></option>
                                   <option value="male">Male</option>
                                   <option value="female">Female</option>
@@ -620,6 +630,41 @@ include "db.php";
         return regex.test(phoneNumber);
     }
 </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var countryCodeInput = document.getElementById('country_code');
+            var phoneNumberInput = document.getElementById('phone_number');
+
+            countryCodeInput.addEventListener('change', function() {
+                var countryCode = this.value;
+                phoneNumberInput.value = countryCode;
+                phoneNumberInput.setAttribute('placeholder', countryCode);
+            });
+
+            phoneNumberInput.addEventListener('input', function() {
+                var countryCode = countryCodeInput.value;
+                var phoneNumber = this.value;
+                var fullNumber = phoneNumber.startsWith(countryCode) ? phoneNumber : countryCode + phoneNumber;
+
+                if (!validatePhoneNumber(fullNumber)) {
+                    this.setCustomValidity('Phone number does not match the selected country code or is invalid.');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+
+            function validatePhoneNumber(phoneNumber) {
+                // Check if the phone number starts with +630
+                if (phoneNumber.startsWith('+630')) {
+                    return false;
+                }
+                // A basic example of phone number validation
+                var regex = /^\+\d{1,3}\d{6,14}$/; // Adjust this regex based on your requirements
+                return regex.test(phoneNumber);
+            }
+        });
+    </script>
 
 
 

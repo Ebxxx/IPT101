@@ -105,17 +105,28 @@ include "db.php";
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-book"></i>
               <p>
-                Menu
+                Dashboard
                 <i class="fas fa-angle-left right"></i>
               </p>
-            </a>
+            </a>        
             <ul class="nav nav-treeview">
+            <li class="nav-item">                
+                    <a href="index_admin/enroll_students.php" class="nav-link">
+                      <i class="fas fa-graduation-cap mr-1" ></i>&nbsp;&nbsp;
+                     <p>Students</p> 
+                    </a>
+                  </li>
+
+                  <br>
+
               <li class="nav-item">
                 <a href="edit_profile.php" class="nav-link">
                   <i class="fa fa-user"></i>&nbsp;&nbsp;
                   <p>Edit Profile</p>
                 </a>
               </li>
+              
+
 
                <li class="nav-item">                
                     <a href="security_dash.php" class="nav-link">
@@ -123,10 +134,8 @@ include "db.php";
                      <p>Security Settings</p> 
                     </a>
                   </li>
-
-
-
-
+                  <br>
+            
                    <li class="nav-item">                
                     <a href="logout.php" class="nav-link">
                       <i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;

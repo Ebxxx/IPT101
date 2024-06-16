@@ -68,7 +68,7 @@
 
       <br>
       <p class="mb-0">
-        <a href="registrationform.php" class="text-center">Register a new membership</a>
+        <a href="registration-panel.php" class="text-center">Register a new membership</a>
       </p>
     </div>
     <!-- /.card-body -->

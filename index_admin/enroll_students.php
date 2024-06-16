@@ -1,16 +1,44 @@
 <?php
-include "db.php";
-include "get_image.php";
-include "profile_details.php";
-
-// Check if the user is not logged in, then redirect to login page
-if (!isset($_SESSION['username'])) {
-    header('Location: loginform.php');
-    exit;
-}
+session_start();
+include '../db.php'
 ?>
 
+<?php
+include '../db.php';
 
+// Function to fetch pending registrations
+function fetchRegistrations($conn) {
+    $sql = "SELECT * FROM students WHERE status = 'pending'";
+    $result = $conn->query($sql);
+    return $result;
+}
+
+// Function to update registration status
+function updateRegistrationStatus($conn, $id, $status) {
+    $sql = "UPDATE students SET status = ? WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
+    $stmt->bind_param('si', $status, $id);
+    if ($stmt->execute() === false) {
+        die('Execute failed: ' . htmlspecialchars($stmt->error));
+    }
+    $stmt->close();
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['action']) && isset($_POST['user_id'])) {
+        $user_id = $_POST['user_id'];
+        $status = $_POST['action'] == 'enrolled' ? 'enrolled' : 'declined';
+        updateRegistrationStatus($conn, $user_id, $status);
+    }
+}
+
+// Fetch pending registrations
+$registrations = fetchRegistrations($conn);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,9 +49,9 @@ if (!isset($_SESSION['username'])) {
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition sidebar-mini">
 
@@ -38,7 +66,7 @@ if (!isset($_SESSION['username'])) {
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="dashboard.php" class="nav-link">Home</a>
+        <a href="../dashboard.php" class="nav-link">Home</a>
       </li>
 
     <!-- Right navbar links -->
@@ -112,7 +140,7 @@ if (!isset($_SESSION['username'])) {
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item"></li>
    
-         <li class="nav-item menu-open">
+          <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-book"></i>
               <p>
@@ -122,7 +150,7 @@ if (!isset($_SESSION['username'])) {
             </a>        
             <ul class="nav nav-treeview">
             <li class="nav-item">                
-                    <a href="index_admin/enroll_students.php" class="nav-link">
+                    <a href="enroll_students.php" class="nav-link">
                       <i class="fas fa-graduation-cap mr-1" ></i>&nbsp;&nbsp;
                      <p>Students</p> 
                     </a>
@@ -131,7 +159,7 @@ if (!isset($_SESSION['username'])) {
                   <br>
 
               <li class="nav-item">
-                <a href="edit_profile.php" class="nav-link">
+                <a href="../edit_profile.php" class="nav-link">
                   <i class="fa fa-user"></i>&nbsp;&nbsp;
                   <p>Edit Profile</p>
                 </a>
@@ -140,7 +168,7 @@ if (!isset($_SESSION['username'])) {
 
 
                <li class="nav-item">                
-                    <a href="security_dash.php" class="nav-link">
+                    <a href="../security_dash.php" class="nav-link">
                       <i class="fa fa-unlock-alt" ></i>&nbsp;&nbsp;
                      <p>Security Settings</p> 
                     </a>
@@ -148,7 +176,7 @@ if (!isset($_SESSION['username'])) {
                   <br>
             
                    <li class="nav-item">                
-                    <a href="logout.php" class="nav-link">
+                    <a href="../logout.php" class="nav-link">
                       <i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;
                      <p>Sign-out</p>
                     </a>
@@ -186,90 +214,45 @@ if (!isset($_SESSION['username'])) {
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3">
-
-                       
-                <!-- Profile Image -->
-        <div class="card card-primary card-outline">
-            <div class="card-body box-profile">
-                <div class="text-center">
-                <?php 
-                if (!empty($profile_picture)): ?>
-                    <img src="data:image;base64, <?php echo base64_encode($profile_picture); ?>" alt="Profile Picture" class="profile-user-img img-fluid img-circle">
-                <?php else: ?>
-                    <img class="profile-user-img img-fluid img-circle" src="uploads/avatar.png" alt="Blank profile picture">
-                <?php endif; ?>
-
-                </div>  
-
-                  <h3 class="profile-username text-center"><?php echo $row['username']; ?></h3>
-                  <p class="text-center"><?php echo $full_name ?></p>
-                  <ul class="list-group list-group-unbordered mb-3">
-                  <li class="list-group-item">
-                    <b>Email:</b> <a class="float-right"><?php echo $row['Email']; ?></a>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Soc med:</b> <a class="float-right"><?php echo $user['social_media']; ?></a>
-                  </li>
-                </ul>
             </div>
-              </div>
-              
-              <?php
-                  // Example database connection and query
-                  include 'db.php';
-
-                  
-              // Check the connection
-              if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-              }
-
-                
-              if(isset($_SESSION['user_id'])) {
-                $userId = $_SESSION['user_id'];
-              // Query to fetch the first row
-              $sql = "SELECT * FROM user_profile WHERE user_id = $userId";
-              $result = $conn->query($sql);
-
-              if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-              } else {
-                $row = array(); // No rows found, initialize an empty array
-              }
-            }
-
-              ?>
-                <!-- About Me Box -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">About Me</h3>
-              </div>
-              <div class="card-body">
-                <strong><i class="fas fa-book mr-1"></i> Contact info:</strong>
-                <p><?php echo isset($row['phone_number']) ? $row['phone_number'] : 'N/A'; ?></p>
-                <hr>
-                <strong><i class="fas fa-map-marker-alt mr-1"></i> Address: </strong>
-                <p><?php echo isset($row['address']) ? $row['address'] : 'N/A'; ?></p>
-                <hr>
-                <strong><i class="fas fa-birthday-cake"></i> Date of birth:</strong>
-                <p><?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : 'N/A'; ?></p>
-                <hr>
-                <strong><i class="far fa-file-alt mr-1"></i> Gender: </strong>
-                <p><?php echo isset($row['gender']) ? $row['gender'] : 'N/A'; ?></p>
-                <hr>
-                <strong><i class="fas fa-graduation-cap mr-1"></i> Education: </strong>
-                <p><?php echo isset($row['education']) ? $row['education'] : 'N/A'; ?></p>
-                <hr>
-                <strong><i class="far fas fa-briefcase mr-1"></i> Job: </strong>
-                <p><?php echo isset($row['job']) ? $row['job'] : 'N/A'; ?></p>
-                <hr>
-                <strong><i class="far fas fa-laptop-code mr-1"></i> Skills: </strong>
-                <p><?php echo isset($row['skills']) ? $row['skills'] : 'N/A'; ?></p>
-                <hr>
-              </div>
             </div>
           </div>
-         
+          <div class="col-md-13">
+            <!-- Student Registrations -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Pending Student Registrations</h3>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Registration Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = $registrations->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['Email']); ?></td>
+                        <td><?php echo htmlspecialchars($row['registration_date']); ?></td>
+                        <td>
+                            <form method="POST" style="display:inline-block;">
+                                <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
+                                <button type="submit" name="action" value="enrolled" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+                            <form method="POST" style="display:inline-block;">
+                                <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
+                                <button type="submit" name="action" value="declined" class="btn btn-danger btn-sm">Decline</button>
+                            </form>
+                        </td>
+                      </tr>
+                    <?php endwhile; ?>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -294,56 +277,13 @@ if (!isset($_SESSION['username'])) {
 </div>
 <!-- ./wrapper -->
 <!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
+<script src="../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
+<script src="../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
+<script src="../dist/js/demo.js"></script>
 
-<!-- <script>
-$(document).ready(function() {
-  function fetchRegistrations() {
-    $.ajax({
-      url: 'index-student/fetch_registrations.php',
-      method: 'GET',
-      success: function(data) {
-        let registrationList = $('#registration-list');
-        registrationList.empty();
-        data.forEach(function(registration) {
-          registrationList.append(`
-            <tr>
-              <td>${registration.name}</td>
-              <td>${registration.email}</td>
-              <td>${registration.registration_date}</td>
-              <td>
-                <button class="btn btn-success btn-sm" onclick="updateStatus(${registration.id}, 'Accepted')">Accept</button>
-                <button class="btn btn-danger btn-sm" onclick="updateStatus(${registration.id}, 'Declined')">Decline</button>
-              </td>
-            </tr>
-          `);
-        });
-      }
-    });
-  }
-
-  function updateStatus(id, status) {
-    $.ajax({
-      url: 'index-student/update_registration_status.php',
-      method: 'POST',
-      data: {
-        id: id,
-        status: status
-      },
-      success: function(response) {
-        fetchRegistrations();
-      }
-    });
-  }
-
-  fetchRegistrations();
-});
-</script> -->
 </body>
 </html>
